@@ -1,14 +1,16 @@
+Num_rows = 3
 class Board
     def initialize
-      @board = Array.new(3, 0).map{|el| Array.new(3, '-')}
+      @board = Array.new(Num_rows, 0).map{|el| Array.new(Num_rows, '-')}
     end
     def mark_board(co_ords, mark)
       x, y = co_ords
       while @board[x][y] != '-'
         p "Invalid cell, input another one"
-        x, y = prompt_player
+        return false
       end   
       @board[x][y] = mark
+      true
     end
 
     def has_won?(mark)
@@ -26,12 +28,19 @@ class Board
         
       false
     end
+
+    def has_tied?
+        (0...Num_rows).all? do |r|
+            (0...Num_rows).all? do |c|
+                @board[r][c] != '-'
+           end
+        end
+    end
 end
 Marks = ['X', 'O']
 class Player
     attr_reader :mark
     def initialize
-      
       p "Enter player name"
       @name = gets.chomp
       p "Enter a single character to be your mark"
@@ -62,12 +71,18 @@ class TicTacToe
 
    def play
     co_ords = @players[@active_player_id].prompt_player
-    @b.mark_board(co_ords,  @players[@active_player_id].mark)
+    while !@b.mark_board(co_ords,  @players[@active_player_id].mark)
+        co_ords = @players[@active_player_id].prompt_player
+    end    
     if @b.has_won?(@players[@active_player_id].mark)
         @players[@active_player_id].announce("You have won!")
         loser_id = @active_player_id^1
         @players[loser_id].announce("You have lost!")
         return
+    elsif @b.has_tied?
+        @players[@active_player_id].announce("You have tied the gamr!")
+        @players[@active_player_id^1].announce("You have tied the game!")  
+        return  
     end
     @active_player_id = @active_player_id^1
     play
