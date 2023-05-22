@@ -10,9 +10,13 @@ class Board
         return false
       end   
       @board[x][y] = mark
+      display
       true
     end
 
+    def display
+        @board.each{|r| p r}
+    end
     def has_won?(mark)
       #check rows
       return true if @board.any?{ |row|  row.all?{|el| el == mark}}
@@ -80,7 +84,7 @@ class TicTacToe
         @players[loser_id].announce("You have lost!")
         return
     elsif @b.has_tied?
-        @players[@active_player_id].announce("You have tied the gamr!")
+        @players[@active_player_id].announce("You have tied the game!")
         @players[@active_player_id^1].announce("You have tied the game!")  
         return  
     end
