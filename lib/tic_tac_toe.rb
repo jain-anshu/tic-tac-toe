@@ -1,5 +1,6 @@
 Num_rows = 3
 class Board
+    attr_reader :board
     def initialize
       @board = Array.new(Num_rows, 0).map{|el| Array.new(Num_rows, '-')}
     end
@@ -96,4 +97,3 @@ class TicTacToe
    
 end
 
-tt = TicTacToe.new();
